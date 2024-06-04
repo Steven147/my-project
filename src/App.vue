@@ -1,26 +1,55 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="container">
+    <div class="left-column">
+      <TodoInput @add-todo="addTodo" @clear-todos="clearTodos" />
+      <TodoList :todos="todos" />
+      <TodoInput @add-todo="addRecord" @clear-todos="clearRecords" />
+      <TodoList :todos="records" />
+    </div>
+    <div class="right-column">
+      <PreviewView :todos="todos" :records="records" />
+    </div>
+  </div>
 </template>
 
-<script>
-import HelloWorld from './components/HelloWorld.vue'
+<script setup>
+import { ref } from 'vue'
+import TodoInput from './components/TodoInput.vue'
+import TodoList from './components/TodoList.vue'
+import PreviewView from './components/PreviewView.vue'
 
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
+// 创建响应式数据 todos, records
+const todos = ref([])
+const records = ref([])
+
+function addTodo(todo) {
+  todos.value.push(todo)
 }
+
+function clearTodos() {
+  todos.value = []
+}
+
+function addRecord(record) {
+  records.value.push(record)
+}
+
+function clearRecords() {
+  records.value = []
+}
+
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<style scoped>
+.container {
+  display: flex;
+}
+
+.left-column {
+  flex: 1;
+}
+
+.right-column {
+  flex: 1;
 }
 </style>
