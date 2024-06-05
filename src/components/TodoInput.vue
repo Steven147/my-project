@@ -1,14 +1,15 @@
 <template>
   <div>
-    <input type="text" v-model="todoInput" @keyup.enter="onAddTodo" />
-    <button @click="onClearTodos">Clear</button>
+    <input type="text" v-model="todoInput" @keyup.enter="onAddTodo()" />
+    <button @click="onAddTodo()">submit</button>
+    <button @click="onClearTodos()">Clear</button>
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import { ref, defineEmits } from "vue";
 
-const emit = defineEmits(["response"]);
+const emit = defineEmits(["add-todo", "clear-todos"]);
 
 const todoInput = ref("");
 

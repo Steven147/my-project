@@ -1,4 +1,4 @@
-<template>
+  <template>
   <div class="container">
     <img
       class="preview-image"
@@ -6,22 +6,23 @@
       alt="preview-view"
     />
     <ul class="todo-list">
-      <li v-for="(todo, index) in todos" :key="index">{{ todo }}</li>
+      <li v-for="(todo, index) in todos" :key="index">{{ todo.getString() }}</li>
     </ul>
     <ul class="record-list">
-      <li v-for="(record, index) in records" :key="index">{{ record }}</li>
+      <li v-for="(record, index) in records" :key="index">{{ record.getString() }}</li>
     </ul>
   </div>
 </template>
 
-<script setup>
+<script script lang="ts" setup>
 
-import { defineProps } from 'vue';
+import { defineProps, PropType } from 'vue';
+import { Item } from './TodoItem'
 
 defineProps({
-  todos: [],
-  records: [],
-});
+  todos: Object as PropType<Item[]>,
+  records: Object as PropType<Item[]>
+})
 
 </script>
 
@@ -62,7 +63,7 @@ ul {
     width: 25%;
     height: 35.5%;
     top: 60%;
-    left: 57%;
-    font-size: 1vw;
+    left: 57.5%;
+    font-size: 0.75vw;
 }
 </style>

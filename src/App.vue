@@ -1,10 +1,10 @@
 <template>
   <div class="container">
     <div class="left-column">
-      <TodoInput @add-todo="addTodo" @clear-todos="clearTodos" />
-      <TodoList :todos="todos" />
-      <TodoInput @add-todo="addRecord" @clear-todos="clearRecords" />
-      <TodoList :todos="records" />
+      <TodoInput @add-todo="todosWrapper.addTodo" @clear-todos="todosWrapper.clearTodos" />
+      <TodoList @delete-todo="todosWrapper.deleteTodo" @edit-todo="todosWrapper.editTodo" :todos="todos" />
+      <TodoInput @add-todo="recordsWrapper.addTodo" @clear-todos="recordsWrapper.clearTodos" />
+      <TodoList @delete-todo="recordsWrapper.deleteTodo" @edit-todo="recordsWrapper.editTodo" :todos="records" />
     </div>
     <div class="right-column">
       <PreviewView :todos="todos" :records="records" />
@@ -12,31 +12,19 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import { ref } from 'vue'
 import TodoInput from './components/TodoInput.vue'
 import TodoList from './components/TodoList.vue'
 import PreviewView from './components/PreviewView.vue'
+import { Item } from './components/TodoItem'
+import { ItemList, RecordList } from './components/TodoItem'
 
-// 创建响应式数据 todos, records
-const todos = ref([])
-const records = ref([])
+const todos = ref<Item[]>([])
+const todosWrapper = new ItemList(todos.value, false)
 
-function addTodo(todo) {
-  todos.value.push(todo)
-}
-
-function clearTodos() {
-  todos.value = []
-}
-
-function addRecord(record) {
-  records.value.push(record)
-}
-
-function clearRecords() {
-  records.value = []
-}
+const records = ref<Item[]>([])
+const recordsWrapper = new RecordList(records.value, true)
 
 </script>
 
