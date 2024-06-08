@@ -13,18 +13,35 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, watchEffect } from 'vue'
 import TodoInput from './components/TodoInput.vue'
 import TodoList from './components/TodoList.vue'
 import PreviewView from './components/PreviewView.vue'
-import { Item } from './components/TodoItem'
+import { Item, Record } from './components/TodoItem'
 import { ItemList, RecordList } from './components/TodoItem'
 
-const todos = ref<Item[]>([])
-const todosWrapper = new ItemList(todos.value, false)
+const storageKey1 = 'todos_data_key';
+const storageKey2 = 'records_data_key';
 
-const records = ref<Item[]>([])
-const recordsWrapper = new RecordList(records.value, true)
+const todos = ref<Item[]>(
+  JSON.parse(localStorage.getItem(storageKey1) || '[]').map(
+    (obj: any) => new Item(obj.content)
+  )
+);
+const todosWrapper = new ItemList(todos, false)
+
+const records = ref<Item[]>(
+  JSON.parse(localStorage.getItem(storageKey2) || '[]').map(
+    (obj: any) => new Record(obj.content, obj.startTime, obj.endTime)
+  )
+);
+const recordsWrapper = new RecordList(records, true)
+
+watchEffect(() => {
+  localStorage.setItem(storageKey1, JSON.stringify(todos.value));
+  localStorage.setItem(storageKey2, JSON.stringify(records.value));
+  console.log("save storage")
+});
 
 </script>
 

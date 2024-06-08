@@ -1,4 +1,5 @@
 import { getFormattedTime } from './TimeUtil'
+import {Ref} from 'vue'
 
 export class Item {
   public content: string
@@ -27,10 +28,10 @@ export class Record extends Item {
 }
 
 export class ItemList {
-  protected items: Item[];
+  protected items: Ref<Item[]>;
   public getFullString: boolean;
 
-  constructor(items: Item[], getFullString: boolean) {
+  constructor(items: Ref<Item[]>, getFullString: boolean) {
     this.items = items;
     this.getFullString = getFullString;
 
@@ -39,6 +40,10 @@ export class ItemList {
     this.editTodo = this.editTodo.bind(this);
     this.deleteTodo = this.deleteTodo.bind(this);
     this.clearTodos = this.clearTodos.bind(this);
+  }
+
+  convertToItem(storage: any) {
+    this.items.value = storage.map((obj: any) => new Item(obj.content));
   }
 
   addTodo(todoValue: string) {
@@ -55,26 +60,26 @@ export class ItemList {
     //   return todo.value
     // }
     // };
-    this.items.push(item);
+    this.items.value.push(item);
   }
 
   editTodo(todo: Item, index: number) {
-    this.items[index] = todo;
+    this.items.value[index] = todo;
   }
 
   deleteTodo(index: number) {
-    this.items.splice(index, 1);
+    this.items.value.splice(index, 1);
   }
 
   clearTodos() {
-    this.items = []
+    this.items.value = []
   }
 }
 
 
 export class RecordList extends ItemList {
   addTodo(todoValue: string) {
-    const startTimeNullable = (this.items.slice().reverse().find(
+    const startTimeNullable = (this.items.value.slice().reverse().find(
       () => true
     ) as Record)?.endTime;
     const item = new Record(
@@ -82,6 +87,11 @@ export class RecordList extends ItemList {
       startTimeNullable || "",
       getFormattedTime()
     )
-    this.items.push(item);
+    this.items.value.push(item);
+  }
+
+  convertToItem(storage: any) {
+    this.items = storage.map((obj: any) => new Record(obj.content, obj.startTime, obj.endTime));
+    console.log("convertToItem")
   }
 }
