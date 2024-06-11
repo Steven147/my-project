@@ -30,7 +30,7 @@ const todos = ref<Item[]>(
 );
 const todosWrapper = new ItemList(todos, false)
 
-const records = ref<Item[]>(
+const records = ref<Record[]>(
   JSON.parse(localStorage.getItem(storageKey2) || '[]').map(
     (obj: any) => new Record(obj.content, obj.startTime, obj.endTime)
   )
